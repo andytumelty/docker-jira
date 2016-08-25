@@ -1,0 +1,20 @@
+jira:
+  image: cptactionhank/atlassian-jira
+  ports:
+    - "9080:8080"
+  links:
+    - postgres
+  volumes:
+    # /var/atlassian/jira is the jira home directory
+    - /data/jira:/var/atlassian/jira
+    # /opt/atlassian/jira/conf is a subset of the application directory
+    # that unsurprisingly contains application configuration
+    # Splitting this out ensures configuration for things like proxies in
+    # server.xml are persisted across container updates
+    - /data/jira-conf:/opt/atlassian/jira/conf
+postgres:
+  image: postgres
+  environment:
+    # You might want to change these to something else
+    - POSTGRES_USER=jira
+    - POSTGRES_PASSWORD=jira
